@@ -36,8 +36,8 @@ This demo application demonstrates:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-org/Session Services-demo.git
-cd Session Services-demo
+git clone https://github.com/jmcmullen/session-services-example
+cd session-services-example
 ```
 
 2. Install dependencies:
@@ -64,7 +64,7 @@ NEXT_PUBLIC_API_URL=https://api.session.services
 NEXT_PUBLIC_TENANT_ID=your_tenant_id_here
 
 # Your application base URL
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3020
 ```
 
 ## Development
@@ -77,7 +77,7 @@ bun dev
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Open [http://localhost:3020](http://localhost:3020) to view the application.
 
 ## Project Structure
 
@@ -125,10 +125,6 @@ const config = await getTenantConfig();
 ### API Endpoints Used
 
 - `GET /events` - List and search events with cursor-based pagination
-  - Supports text search via `query` parameter
-  - Geo-location filtering with `latitude`, `longitude`, `radius`
-  - Status filtering: `UPCOMING`, `ACTIVE`, `ENDED`, `CANCELLED`
-  - Visibility filtering: `PUBLIC`, `PRIVATE`, `SCHEDULED`, `PASSWORD`
 - `GET /events/{identifier}` - Get event by ID or slug
 - `GET /tenant/config` - Fetch tenant configuration and regions
 
@@ -137,14 +133,14 @@ const config = await getTenantConfig();
 The application uses `@session-services/react-elements` to embed the Session Services ticketing widget:
 
 ```tsx
-import { Session ServicesTicketing } from "@session-services/react-elements";
+import { SessionsTicketing } from "@session-services/react-elements";
 
-<Session ServicesTicketing
+<SessionsTicketing
   eventId={event.id}
   tenantId={TENANT_ID}
   returnUrl="/thank-you"
   theme={colorScheme} // "light" or "dark"
-/>
+/>;
 ```
 
 ### Dynamic Theming
@@ -218,33 +214,6 @@ bun run format
 | `NEXT_PUBLIC_TENANT_ID` | Your Session Services tenant ID | `ten_01hk153x00en6tvgwwwhn8xj1p` |
 | `NEXT_PUBLIC_BASE_URL`  | Your application URL            | `http://localhost:3000`          |
 
-## Deployment
-
-The application can be deployed to any platform that supports Next.js:
-
-### Vercel
-
-```bash
-vercel
-```
-
-### Docker
-
-```dockerfile
-FROM oven/bun:latest
-WORKDIR /app
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
-COPY . .
-RUN bun run build
-EXPOSE 3000
-CMD ["bun", "start"]
-```
-
-### Railway/Render/Heroku
-
-The application works with any Node.js hosting platform. Ensure environment variables are configured in your deployment platform.
-
 ## Features Demonstrated
 
 - ✅ Event listing with responsive grid layout
@@ -259,64 +228,6 @@ The application works with any Node.js hosting platform. Ensure environment vari
 - ✅ Search and filtering capabilities
 - ✅ Responsive mobile-first design
 - ✅ Error handling with user-friendly messages
-
-## Customization
-
-### Modifying the Theme
-
-Edit the theme configuration in `src/app/layout.tsx`:
-
-```typescript
-const theme = createTheme({
-  primaryColor: "pink",
-  colors: {
-    pink: [...], // Your custom color scale
-  },
-});
-```
-
-### Adding New API Endpoints
-
-Extend the API client in `src/lib/api.ts`:
-
-```typescript
-export async function getEventSections(eventId: string) {
-  return fetchAPI<SectionsResponse>(`/events/${eventId}/sections`);
-}
-```
-
-### Custom Event Filtering
-
-Modify the search parameters in `src/lib/types.ts` and use them in API calls:
-
-```typescript
-const { events } = await getEvents({
-  status: "UPCOMING",
-  approval: "APPROVED",
-  visibility: "PUBLIC",
-  limit: 50,
-});
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **API Connection Errors**
-
-   - Verify your `NEXT_PUBLIC_TENANT_ID` is correct
-   - Check API endpoint URL in environment variables
-   - Ensure your tenant is active on the Session Services platform
-
-2. **Ticketing Widget Not Loading**
-
-   - Confirm `@session-services/react-elements` is installed
-   - Check browser console for errors
-   - Verify event ID is valid
-
-3. **Type Errors**
-   - Run `bun run lint` to check for type issues
-   - Ensure all imports reference correct paths
 
 ## Session Services API Documentation
 
@@ -341,10 +252,6 @@ This demo application is provided as-is for educational and development purposes
 
 For questions about the Session Services platform:
 
-- Documentation: https://docs.session.services
+- Documentation: https://session.services/docs
 - API Reference: https://api.session.services/docs
 - Support: support@session.services
-
----
-
-Built with ❤️ to showcase the Session Services ticketing platform capabilities.
